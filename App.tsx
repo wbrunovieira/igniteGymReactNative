@@ -9,6 +9,7 @@ import {
   Roboto_700Bold
 
  } from '@expo-google-fonts/roboto'
+import { Loading } from '@components/Loading';
 
 export default function App() {
 
@@ -23,7 +24,7 @@ export default function App() {
         translucent
       />
 
-      { fontsLoaded ? <View /> : <View /> }
+      { fontsLoaded ? <Loading /> : <View /> }
 
       
     </NativeBaseProvider>
