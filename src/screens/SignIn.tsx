@@ -1,6 +1,7 @@
 import { VStack, Image, Text, Center, Heading } from "native-base";
 
 import { Input } from "@components/Input";
+import { Button } from "@components/Button";
 
 import BackgroundImg from '@assets/background.png';
 
@@ -41,6 +42,8 @@ export function SignIn() {
              placeholder="Senha"
              secureTextEntry
              />
+
+            <Button title="Acessar" />
       </Center>
 
 

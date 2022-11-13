@@ -13,7 +13,7 @@ import {
 import { THEME } from './src/theme';
 
 import { Loading } from '@components/Loading';
-import { SignIn } from '@components/SignIn';
+import { SignIn } from '@screens/SignIn';
 
 export default function App() {
 
