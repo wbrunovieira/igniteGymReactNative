@@ -13,7 +13,7 @@ import {
 import { THEME } from './src/theme';
 
 import { Loading } from '@components/Loading';
-import { SignUp } from '@screens/SignUp';
+import { Routes } from './src/routes';
 
 export default function App() {
 
@@ -28,7 +28,7 @@ export default function App() {
         translucent
       />
 
-      { fontsLoaded ? <SignUp /> : <Loading /> }
+      { fontsLoaded ? <Routes /> : <Loading /> }
 
       
     </NativeBaseProvider>
