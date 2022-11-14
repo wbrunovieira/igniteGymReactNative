@@ -7,7 +7,7 @@ import { Profile } from '@screens/Profile';
 
 type AppRoutes = {
   home: undefined;
-  exercise: undefine
+  exercise: undefined;
   profile: undefined;
   history: undefined;
 }
@@ -21,7 +21,7 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 export function AppRoutes() {
   return (
     
-    <Navigator>
+    <Navigator screenOptions={{ headerShown: false}}>
       <Screen 
         name='home'
         component={Home}
