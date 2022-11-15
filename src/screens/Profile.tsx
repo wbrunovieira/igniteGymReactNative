@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
-import { Center, ScrollView, Text, VStack, Skeleton } from 'native-base';
+import { Center, ScrollView, Text, VStack, Skeleton, Heading } from 'native-base';
 
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { TouchableOpacity } from 'react-native';
+import { Input } from '@components/Input';
+import { Button } from '@components/Button';
 
 const PHOTO_SIZE = 33
 
@@ -31,6 +33,7 @@ export function Profile() {
               size={33}
           />
           }
+
           <TouchableOpacity>
             <Text 
               color="green.500"
@@ -42,7 +45,45 @@ export function Profile() {
               Alterar foto
             </Text>
           </TouchableOpacity>
+
+          <Input
+            bg="gray.600"
+            placeholder="Nome"
+          />
+          <Input
+            bg="gray.600"
+            placeholder="bruno@email.com"
+            isDisabled
+          />
         </Center>
+
+        <VStack px={10} mt={12} mb={0}>
+            <Heading color="gray.200" fontSize="md" mb={2}>
+                Alterar a Senha
+            </Heading>
+
+            <Input
+              bg="gray.600"
+              placeholder="Senha Antiga"
+              secureTextEntry
+            />
+
+            <Input
+              bg="gray.600"
+              placeholder="Nova Senha"
+              secureTextEntry
+            />
+            <Input
+              bg="gray.600"
+              placeholder="Confirme a Nova Senha"
+              secureTextEntry
+            />
+
+            <Button
+              title="Atualizar"
+              mt={4}
+            />
+        </VStack>
       </ScrollView>
     </VStack>
   );
