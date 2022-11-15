@@ -14,18 +14,13 @@ import { Button } from '@components/Button';
 
 const PHOTO_SIZE = 33
 
-interface PhotoSelectProps {
-  uri: string
-  canceled: boolean
-  
-}
 
 export function Profile() {
   const [ photoIsLoading, SetPhotoIsLoading ] = useState(false)
   const [ userPhoto, SetUserPhoto ] = useState<string>('https://github.com/wbrunovieira.png')
 
   async function handleUserPhotoSelect(){
-    const photoSelected:PhotoSelectProps = await ImagePicker.launchImageLibraryAsync({
+    const photoSelected = await ImagePicker.launchImageLibraryAsync({
       mediaTypes:ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       aspect:[4 , 4],
@@ -37,9 +32,9 @@ export function Profile() {
       
       return;
     }
-    console.log(photoSelected.uri)
+    
 
-    SetUserPhoto(photoSelected.uri)
+    SetUserPhoto(photoSelected.assets[0].uri)
   }
 
   return (
