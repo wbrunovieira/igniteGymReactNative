@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { Center, ScrollView, Text, VStack, Skeleton, Heading } from 'native-base';
 
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
-import { TouchableOpacity } from 'react-native';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 
@@ -17,7 +17,7 @@ export function Profile() {
     <VStack>
       <ScreenHeader title="Perfil"/>
 
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 36 }} >
         <Center mt={6} px={10}>
           { photoIsLoading ? <Skeleton
                                 w={PHOTO_SIZE}
@@ -57,8 +57,14 @@ export function Profile() {
           />
         </Center>
 
-        <VStack px={10} mt={12} mb={0}>
-            <Heading color="gray.200" fontSize="md" mb={2}>
+        <Center px={10} mt={6} >
+            <Heading
+              color="gray.200"
+              fontSize="md"
+              mb={2}
+              alignSelf="flex-start"
+               mt={6}
+               >
                 Alterar a Senha
             </Heading>
 
@@ -82,8 +88,9 @@ export function Profile() {
             <Button
               title="Atualizar"
               mt={4}
+              mb={8}
             />
-        </VStack>
+        </Center>
       </ScrollView>
     </VStack>
   );
