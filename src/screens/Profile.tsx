@@ -16,25 +16,37 @@ const PHOTO_SIZE = 33
 
 
 export function Profile() {
-  const [ photoIsLoading, SetPhotoIsLoading ] = useState(false)
-  const [ userPhoto, SetUserPhoto ] = useState<string>('https://github.com/wbrunovieira.png')
+
+  const [ photoIsLoading, setPhotoIsLoading ] = useState(false)
+  const [ userPhoto, setUserPhoto ] = useState<string>('https://github.com/wbrunovieira.png')
 
   async function handleUserPhotoSelect(){
-    const photoSelected = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes:ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      aspect:[4 , 4],
-      allowsEditing: true,
-      
-    });
+    
+    setPhotoIsLoading(true)
 
-    if(photoSelected.canceled){
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes:ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect:[4 , 4],
+        allowsEditing: true,
+        
+      });
+  
+      if(photoSelected.canceled){
+        
+        return;
+      }
       
-      return;
+  
+      setUserPhoto(photoSelected.assets[0].uri)
+      
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setPhotoIsLoading(false)
     }
     
-
-    SetUserPhoto(photoSelected.assets[0].uri)
   }
 
   return (
