@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import {  TouchableOpacity } from 'react-native';
 
-import { Center, ScrollView, Text, VStack, Skeleton, Heading } from 'native-base';
+import { Center, ScrollView, Text, VStack, Skeleton, Heading, useToast } from 'native-base';
 
 import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
 
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
@@ -19,6 +20,8 @@ export function Profile() {
 
   const [ photoIsLoading, setPhotoIsLoading ] = useState(false)
   const [ userPhoto, setUserPhoto ] = useState<string>('https://github.com/wbrunovieira.png')
+
+const toast = useToast()
 
   async function handleUserPhotoSelect(){
     
@@ -38,12 +41,35 @@ export function Profile() {
         return;
       }
       
+      if(photoSelected.assets[0].uri){
+
+        const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+
+        if(photoInfo.size && (photoInfo.size / 1024 / 1024) > 1){
+
+          return toast.show({
+            title:"Imagem muito grande, selecione uma menor que 3MB",
+            placement: 'top',
+            bgColor:'red.500',
+            paddingTop: 5,
+            paddingBottom: 5,
+            fontSize: 20
+          })
+          
+
+        }
+
+        setUserPhoto(photoSelected.assets[0].uri)
+
+      }
   
-      setUserPhoto(photoSelected.assets[0].uri)
       
     } catch (error) {
+
       console.log(error)
+
     } finally {
+
       setPhotoIsLoading(false)
     }
     
