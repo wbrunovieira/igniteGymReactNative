@@ -34,7 +34,7 @@ const navigation = useNavigation<AppNavigatorRoutesProps>()
           </TouchableOpacity>
 
           <HStack justifyContent="space-between" mt={4} mb={8} alignItems="center">
-          <Heading color="gray.100" fontSize="lg"  flexShrink={1}>
+          <Heading color="gray.100" fontSize="lg"  flexShrink={1} fontFamily="heading">
             Puxada frontal
           </Heading>
 
@@ -71,7 +71,7 @@ const navigation = useNavigation<AppNavigatorRoutesProps>()
 
             <HStack>
               <RepetitionsSvg />
-              <Text color="gray.200" ml="2">
+              <Text color="gray.200" ml="2" >
                 12 repetições
               </Text>
             </HStack>
