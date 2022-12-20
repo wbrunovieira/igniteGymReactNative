@@ -6,6 +6,10 @@ import { Center, ScrollView, Text, VStack, Skeleton, Heading, useToast } from 'n
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
 
+
+import { api } from '@services/api';
+import { AppError } from '@utils/AppErrors';
+
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { Input } from '@components/Input';
@@ -21,10 +25,11 @@ const PHOTO_SIZE = 33
 type FormDataProps = {
   name: string;
   email: string;
-  oldPassword: string;
   password: string;
+  old_password: string;
   confirm_password: string;
 }
+
 
 const profileSchema = yup.object({
   name: yup.string().required('Informe o nome'),
@@ -39,11 +44,12 @@ const profileSchema = yup.object({
 
 export function Profile() {
 
+  const [isUpdating, setIsUpdating] = useState(false);
 const [ photoIsLoading, setPhotoIsLoading ] = useState(false)
 const [ userPhoto, setUserPhoto ] = useState<string>('https://github.com/wbrunovieira.png')
 
 const toast = useToast()
-const { user } = useAuth();
+const { user, updateUserProfile } = useAuth();
 const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({ 
   defaultValues: { 
     name: user.name,
@@ -105,7 +111,31 @@ const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>(
   }
 
   async function handleProfileUpdate(data: FormDataProps) {
-    console.log(data);
+    try {
+      setIsUpdating(true);
+      const userUpdated = user;
+      userUpdated.name = data.name;
+      await api.put('/users', data);
+
+      await updateUserProfile(userUpdated);
+
+      toast.show({
+        title: 'Perfil atualizado com sucesso!',
+        placement: 'top',
+        bgColor: 'green.500'
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Não foi possível atualizar os dados. Tente novamente mais tarde.';
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500'
+      })
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
 
@@ -185,12 +215,12 @@ const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>(
               </Heading>
 
               <Controller 
-                control={control}
-                name="oldPassword"
-                render={({ field: {  onChange } }) => (
-              <Input
+            control={control}
+            name="old_password"
+            render={({ field: { onChange } }) => (
+              <Input 
                 bg="gray.600"
-                placeholder="Senha Antiga"
+                placeholder="Senha antiga"
                 secureTextEntry
                 onChangeText={onChange}
               />
@@ -234,6 +264,7 @@ const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>(
                 mt={4}
                 mb={8}
                 onPress={handleSubmit(handleProfileUpdate)}
+                isLoading={isUpdating}
               />
           </Center>
         </ScrollView>
