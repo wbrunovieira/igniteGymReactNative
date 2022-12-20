@@ -17,6 +17,7 @@ export function Home() {
   const [groups, setGroups] = useState<string[]>([]);
   const [ groupSelected, SetGroupSelected ] = useState('antebraço');
   const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
+ 
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -63,6 +64,8 @@ export function Home() {
       setIsLoading(false);
     }
   }
+
+  
 
   useEffect(() => {
     fetchGroups();
