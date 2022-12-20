@@ -15,7 +15,7 @@ import { Loading } from '@components/Loading';
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState<string[]>([]);
-  const [ groupSelected, SetGroupSelected ] = useState('Ombro');
+  const [ groupSelected, SetGroupSelected ] = useState('antebraço');
   const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()

@@ -16,6 +16,7 @@ import BodySvg from '@assets/body.svg';
 import SeriesSvg from '@assets/series.svg';
 import RepetitionsSvg from '@assets/repetitions.svg';
 import { ExerciseDTO } from '@dtos/ExerciseDTO';
+import { Loading } from '@components/Loading';
 
 type RouteParamsProps = {
   exerciseId: string;
@@ -24,6 +25,7 @@ type RouteParamsProps = {
 export function Exercise() {
 
   const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO);
+  const [ isLoading, setIsLoading ] = useState(true)
 
 const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -39,6 +41,7 @@ const { exerciseId } = route.params as RouteParamsProps
 
   async function fetchExerciseDetails() {
     try {
+      setIsLoading(true)
       const response = await api.get(`/exercises/${exerciseId}`);
 
       setExercise(response.data);
@@ -52,6 +55,8 @@ const { exerciseId } = route.params as RouteParamsProps
         placement: 'top',
         bgColor: 'red.500'
       })
+    } finally {
+        setIsLoading(false)
     }
   }
 
@@ -88,7 +93,7 @@ const { exerciseId } = route.params as RouteParamsProps
         </HStack>
 
         </VStack>
-
+ { isLoading ? <Loading /> :
         <VStack p={8}>
         <Box rounded="lg" mb={3} overflow="hidden">
           <Image
@@ -123,6 +128,7 @@ const { exerciseId } = route.params as RouteParamsProps
           />
         </Box>
       </VStack>
+}
 
     </VStack>
   );
