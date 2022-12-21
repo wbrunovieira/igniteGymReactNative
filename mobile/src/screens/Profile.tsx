@@ -6,6 +6,8 @@ import { Center, ScrollView, Text, VStack, Skeleton, Heading, useToast } from 'n
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
 
+import defaultUserPhotoImg from '../assets/userPhotoDefault.png'
+
 
 import { api } from '@services/api';
 import { AppError } from '@utils/AppErrors';
@@ -46,7 +48,7 @@ export function Profile() {
 
   const [isUpdating, setIsUpdating] = useState(false);
 const [ photoIsLoading, setPhotoIsLoading ] = useState(false)
-const [ userPhoto, setUserPhoto ] = useState<string>('https://github.com/wbrunovieira.png')
+
 
 const toast = useToast()
 const { user, updateUserProfile } = useAuth();
@@ -80,7 +82,7 @@ const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>(
 
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
 
-        if(photoInfo.size && (photoInfo.size / 1024 / 1024) > 1){
+        if(photoInfo.size && (photoInfo.size / 1024 / 1024) > 6){
 
           return toast.show({
             title:"Imagem muito grande, selecione uma menor que 3MB",
@@ -94,7 +96,35 @@ const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>(
 
         }
 
-        setUserPhoto(photoSelected.assets[0].uri)
+        
+        const fileExtension = photoSelected.assets[0].uri.split('.').pop();
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLowerCase(),
+          uri: photoSelected.assets[0].uri,
+          type: `${photoSelected.assets[0].type}/${fileExtension}`
+        } as any;
+
+        const userPhotouploadForm = new FormData();
+        userPhotouploadForm.append('avatar', photoFile);
+
+        const avatarUpdatedResponse = await api.patch('users/avatar', userPhotouploadForm, {
+          headers:{
+            'Content-type':'multipart/form-data'
+          }
+        });
+
+        const userUpdated = user;
+        userUpdated.avatar = avatarUpdatedResponse.data.avatar;
+        updateUserProfile(userUpdated)
+
+
+        toast.show({
+          title:'Foto atualizada com sucesso',
+          placement:'top',
+          bgColor:'green.500'
+
+        })
 
       }
   
@@ -155,7 +185,12 @@ const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>(
                                   /> :
 
             <UserPhoto
-                source={{ uri: userPhoto}}
+                source={
+                  user.avatar 
+
+                  ? {uri: `${api.defaults.baseURL}/avatar/${user.avatar}`}
+                  : defaultUserPhotoImg
+                }
                 alt="foto do usuário"
                 size={33}
             />
